@@ -72,6 +72,10 @@ table {
   /* z-index: 0; */
 }
 
+.cstrFreePlayerDiv{
+  z-index: 99;
+}
+
 h1 {
   position: absolute;
   top: 40vh;
