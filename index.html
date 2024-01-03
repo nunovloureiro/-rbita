@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>EVERYTHING IS BEAUTIFUL AND NOTHING HURTS - online radio</title>
+        <meta name="description" content="EIBANH is a DIY online radio dedicated to portuguese music. Every month 9 new albums are shuffled. Enjoy and please consider supporting the artists.">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <link rel="icon" type="image/png" href="/favicon.png"/>
+        <meta property="og:image" content="/favicon.png">
+
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+
+        <!-- <script src="js/hydra-synth.js"></script> -->
+        <script src="https://unpkg.com/hydra-synth"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <link href="skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css" />
+
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+
+
+        <style>
+
+        #start {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #loading {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        </style>
+
+      <!-- <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function(){
+
+        	var stream = {
+        		title: "Everything Is Beautiful And Nothing Hurts",
+            mp3: "http://176.79.44.228:8000/stream"
+        	},
+        	ready = false;
+
+        	$("#jquery_jplayer_1").jPlayer({
+        		ready: function (event) {
+        			ready = true;
+        			$(this).jPlayer("setMedia", stream);
+        		},
+        		pause: function() {
+        			$(this).jPlayer("clearMedia");
+        		},
+        		error: function(event) {
+        			if(ready && event.jPlayer.error.type === $.jPlayer.error.URL_NOT_SET) {
+        				// Setup the media stream again and play it.
+        				$(this).jPlayer("setMedia", stream).jPlayer("play");
+        			}
+        		},
+        		swfPath: "jplayer",
+        		supplied: "mp3",
+        		preload: "none",
+        		wmode: "window",
+        		useStateClassSkin: true,
+        		autoBlur: false,
+        		keyEnabled: true
+        	});
+
+          });
+
+ </script> -->
+
+        <link rel="stylesheet" href="style.css">
+
+    </head>
+
+    <body>
+
+            <div class="hydraBackground"><script src="js/hydraSketch.js"></script></div>
+
+
+
+
+            <h1>____________lu. tua _ua sua _____</h1>
+
+<!-- WEB PD THINGS -->
+            <button id="start"> Start </button>
+            <div id="loading"> Loading ... </div>
+            <script src="webpd-runtime.js"></script>
+
+            <script>
+                // SUMMARY
+                // 1. WEB PAGE INITIALIZATION
+                // 2. SENDING MESSAGES FROM JAVASCRIPT TO THE PATCH
+                // 3. SENDING MESSAGES FROM THE PATCH TO JAVASCRIPT (coming soon ...)
+
+
+                // ------------- 1. WEB PAGE INITIALIZATION
+                const loadingDiv = document.querySelector('#loading')
+                const startButton = document.querySelector('#start')
+                const audioContext = new AudioContext()
+
+                let patch = null
+                let stream = null
+                let webpdNode = null
+
+                const initApp = async () => {
+                    // Register the worklet
+                    await WebPdRuntime.initialize(audioContext)
+
+                    // Fetch the patch code
+                    response = await fetch('.js/meloTeste.js')
+                    patch = await response.text()
+
+                    // Comment this if you don't need audio input
+                    stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+
+                    // Hide loading and show start button
+                    loadingDiv.style.display = 'none'
+                    startButton.style.display = 'block'
+                }
+
+                const startApp = async () => {
+                    // AudioContext needs to be resumed on click to protects users
+                    // from being spammed with autoplay.
+                    // See : https://github.com/WebAudio/web-audio-api/issues/345
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume()
+                    }
+
+                    // Setup web audio graph
+                    webpdNode = await WebPdRuntime.run(
+                        audioContext,
+                        patch,
+                        WebPdRuntime.defaultSettingsForRun('.js/meloTeste.js'),
+                    )
+                    webpdNode.connect(audioContext.destination)
+
+                    // Comment this if you don't need audio input
+                    const sourceNode = audioContext.createMediaStreamSource(stream)
+                    sourceNode.connect(webpdNode)
+
+                    // Hide the start button
+                    startButton.style.display = 'none'
+                }
+
+                startButton.onclick = startApp
+
+                initApp().
+                    then(() => {
+                        console.log('App initialized')
+                    })
+
+
+                // ------------- 2. SENDING MESSAGES FROM JAVASCRIPT TO THE PATCH
+                // Use the function sendMsgToWebPd to send a message from JavaScript to an object inside your patch.
+                //
+                // Parameters :
+                // - nodeId: the ID of the object you want to send a message to.
+                //          This ID is a string that has been assigned by WebPd at compilation.
+                //          You can find below the list of available IDs with hints to help you
+                //          identify the object you want to interact with.
+                // - portletId : the ID of the object portlet to which the message should be sent.
+                // - message : the message to send. This must be a list of strings and / or numbers.
+                //
+                // Examples :
+                // - sending a message to a bang node of ID 'n_0_1' :
+                //          sendMsgToWebPd('n_0_1', '0', ['bang'])
+                // - sending a message to a number object of ID 'n_0_2' :
+                //          sendMsgToWebPd('n_0_2', '0', [123])
+                //
+                const sendMsgToWebPd = (nodeId, portletId, message) => {
+                    webpdNode.port.postMessage({
+                        type: 'io:messageReceiver',
+                        payload: {
+                            nodeId,
+                            portletId,
+                            message,
+                        },
+                    })
+                }
+            </script>
+
+    </body>
+
+</html>
