@@ -53,7 +53,7 @@
                 await WebPdRuntime.initialize(audioContext)
 
                 // Fetch the patch code
-                response = await fetch('meloTeste.js')
+                response = await fetch('orbita_noTresh.js')
                 patch = await response.text()
 
                 // Comment this if you don't need audio input
@@ -76,7 +76,7 @@
                 webpdNode = await WebPdRuntime.run(
                     audioContext,
                     patch,
-                    WebPdRuntime.defaultSettingsForRun('./meloTeste.js'),
+                    WebPdRuntime.defaultSettingsForRun('./orbita_noTresh.js'),
                 )
                 webpdNode.connect(audioContext.destination)
 
