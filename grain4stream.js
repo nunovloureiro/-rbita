@@ -710,14 +710,14 @@ function n_0_36_RCVS_0(m) {
                         || (n_0_36_STATE.stringFilter === 'bang' 
                             && msg_isBang(m))
                     ) {
-                        m_n_0_48_0__routemsg_RCVS_0(m)
+                        m_n_0_54_0__routemsg_RCVS_0(m)
                         return
                     
                     } else if (
                         msg_isStringToken(m, 0)
                         && msg_readStringToken(m, 0) === n_0_36_STATE.stringFilter
                     ) {
-                        m_n_0_48_0__routemsg_RCVS_0(msg_emptyToBang(msg_shift(m)))
+                        m_n_0_54_0__routemsg_RCVS_0(msg_emptyToBang(msg_shift(m)))
                         return
                     }
 
@@ -725,7 +725,7 @@ function n_0_36_RCVS_0(m) {
                     msg_isFloatToken(m, 0)
                     && msg_readFloatToken(m, 0) === n_0_36_STATE.floatFilter
                 ) {
-                    m_n_0_48_0__routemsg_RCVS_0(msg_emptyToBang(msg_shift(m)))
+                    m_n_0_54_0__routemsg_RCVS_0(msg_emptyToBang(msg_shift(m)))
                     return
                 }
             
@@ -735,35 +735,35 @@ function n_0_36_RCVS_0(m) {
                                 throw new Error('[route], id "n_0_36", inlet "0", unsupported message : ' + msg_display(m))
                             }
 
-function m_n_0_48_0__routemsg_RCVS_0(m) {
+function m_n_0_54_0__routemsg_RCVS_0(m) {
                                 
             if (msg_isMatching(m, [MSG_FLOAT_TOKEN])) {
                 SND_TO_NULL(m)
                 return
             } else {
-                n_0_48_RCVS_0_message(m)
+                n_0_54_RCVS_0_message(m)
                 return
             }
         
-                                throw new Error('[_routemsg], id "m_n_0_48_0__routemsg", inlet "0", unsupported message : ' + msg_display(m))
+                                throw new Error('[_routemsg], id "m_n_0_54_0__routemsg", inlet "0", unsupported message : ' + msg_display(m))
                             }
-let n_0_48_OUTS_0 = 0
-function n_0_48_RCVS_0_message(m) {
+let n_0_54_OUTS_0 = 0
+function n_0_54_RCVS_0_message(m) {
                                 
             if (
                 msg_isMatching(m, [MSG_STRING_TOKEN, MSG_STRING_TOKEN])
                 && msg_readStringToken(m, 0) === 'set'
             ) {
                 n_tabbase_setArrayName(
-                    n_0_48_STATE,
+                    n_0_54_STATE,
                     msg_readStringToken(m, 1),
-                    () => n_tabread_t_setArrayNameFinalize(n_0_48_STATE),
+                    () => n_tabread_t_setArrayNameFinalize(n_0_54_STATE),
                 )
                 return
     
             }
         
-                                throw new Error('[tabread~], id "n_0_48", inlet "0_message", unsupported message : ' + msg_display(m))
+                                throw new Error('[tabread4~], id "n_0_54", inlet "0_message", unsupported message : ' + msg_display(m))
                             }
 
 function n_1_1_RCVS_0(m) {
@@ -1265,23 +1265,23 @@ function n_1_11_RCVS_0(m) {
 
 
 
-function n_0_53_RCVS_0(m) {
+function n_0_52_RCVS_0(m) {
                                 
             if (
                 msg_isStringToken(m, 0) 
                 && msg_readStringToken(m, 0) === 'set'
             ) {
-                n_0_53_STATE.outTemplates = [[]]
+                n_0_52_STATE.outTemplates = [[]]
                 for (let i = 1; i < msg_getLength(m); i++) {
                     if (msg_isFloatToken(m, i)) {
-                        n_0_53_STATE.outTemplates[0].push(MSG_FLOAT_TOKEN)
+                        n_0_52_STATE.outTemplates[0].push(MSG_FLOAT_TOKEN)
                     } else {
-                        n_0_53_STATE.outTemplates[0].push(MSG_STRING_TOKEN)
-                        n_0_53_STATE.outTemplates[0].push(msg_readStringToken(m, i).length)
+                        n_0_52_STATE.outTemplates[0].push(MSG_STRING_TOKEN)
+                        n_0_52_STATE.outTemplates[0].push(msg_readStringToken(m, i).length)
                     }
                 }
 
-                const message = msg_create(n_0_53_STATE.outTemplates[0])
+                const message = msg_create(n_0_52_STATE.outTemplates[0])
                 for (let i = 1; i < msg_getLength(m); i++) {
                     if (msg_isFloatToken(m, i)) {
                         msg_writeFloatToken(
@@ -1293,31 +1293,31 @@ function n_0_53_RCVS_0(m) {
                         )
                     }
                 }
-                n_0_53_STATE.outMessages[0] = message
-                n_0_53_STATE.messageTransferFunctions.splice(0, n_0_53_STATE.messageTransferFunctions.length - 1)
-                n_0_53_STATE.messageTransferFunctions[0] = function (m) {
-                    return n_0_53_STATE.outMessages[0]
+                n_0_52_STATE.outMessages[0] = message
+                n_0_52_STATE.messageTransferFunctions.splice(0, n_0_52_STATE.messageTransferFunctions.length - 1)
+                n_0_52_STATE.messageTransferFunctions[0] = function (m) {
+                    return n_0_52_STATE.outMessages[0]
                 }
                 return
 
             } else {
-                for (let i = 0; i < n_0_53_STATE.messageTransferFunctions.length; i++) {
-                    n_0_54_RCVS_0(n_0_53_STATE.messageTransferFunctions[i](m))
+                for (let i = 0; i < n_0_52_STATE.messageTransferFunctions.length; i++) {
+                    n_0_53_RCVS_0(n_0_52_STATE.messageTransferFunctions[i](m))
                 }
                 return
             }
         
-                                throw new Error('[msg], id "n_0_53", inlet "0", unsupported message : ' + msg_display(m))
+                                throw new Error('[msg], id "n_0_52", inlet "0", unsupported message : ' + msg_display(m))
                             }
-let n_0_54_OUTS_0 = 0
-function n_0_54_RCVS_0(m) {
+let n_0_53_OUTS_0 = 0
+function n_0_53_RCVS_0(m) {
                                 
         if (msg_isMatching(m, [MSG_FLOAT_TOKEN])) {
-            n_0_54_STATE.currentValue = msg_readFloatToken(m, 0)
+            n_0_53_STATE.currentValue = msg_readFloatToken(m, 0)
             return
         }
     
-                                throw new Error('[sig~], id "n_0_54", inlet "0", unsupported message : ' + msg_display(m))
+                                throw new Error('[sig~], id "n_0_53", inlet "0", unsupported message : ' + msg_display(m))
                             }
 
 
@@ -1354,7 +1354,7 @@ function n_0_54_RCVS_0(m) {
         
 
         function ioRcv_n_0_30_0(m) {n_0_30_RCVS_0(m)}
-function ioRcv_n_0_53_0(m) {n_0_53_RCVS_0(m)}
+function ioRcv_n_0_52_0(m) {n_0_52_RCVS_0(m)}
         
 
         
@@ -1477,14 +1477,14 @@ function ioRcv_n_0_53_0(m) {n_0_53_RCVS_0(m)}
     
 
 
-        const n_0_48_STATE = n_tabbase_createState("")
+        const n_0_54_STATE = n_tabbase_createState("")
 
         commons_waitEngineConfigure(() => {
-            if (n_0_48_STATE.arrayName.length) {
+            if (n_0_54_STATE.arrayName.length) {
                 n_tabbase_setArrayName(
-                    n_0_48_STATE, 
-                    n_0_48_STATE.arrayName,
-                    () => n_tabread_t_setArrayNameFinalize(n_0_48_STATE)
+                    n_0_54_STATE, 
+                    n_0_54_STATE.arrayName,
+                    () => n_tabread_t_setArrayNameFinalize(n_0_54_STATE)
                 )
             }
         })
@@ -1831,9 +1831,9 @@ function ioRcv_n_0_53_0(m) {n_0_53_RCVS_0(m)}
             n_delay_setDelay(n_0_47_STATE, 10)
         })
     
-commons_waitFrame(0, () => n_0_53_RCVS_0(msg_bang()))
+commons_waitFrame(0, () => n_0_52_RCVS_0(msg_bang()))
 
-        const n_0_53_STATE = {
+        const n_0_52_STATE = {
             outTemplates: [],
             outMessages: [],
             messageTransferFunctions: [],
@@ -1843,32 +1843,32 @@ commons_waitFrame(0, () => n_0_53_RCVS_0(msg_bang()))
             
             
             
-            n_0_53_STATE.outTemplates[0] = []
+            n_0_52_STATE.outTemplates[0] = []
             
-                n_0_53_STATE.outTemplates[0].push(MSG_FLOAT_TOKEN)
+                n_0_52_STATE.outTemplates[0].push(MSG_FLOAT_TOKEN)
             
-            n_0_53_STATE.outMessages[0] = msg_create(n_0_53_STATE.outTemplates[0])
+            n_0_52_STATE.outMessages[0] = msg_create(n_0_52_STATE.outTemplates[0])
             
-                msg_writeFloatToken(n_0_53_STATE.outMessages[0], 0, 1000)
+                msg_writeFloatToken(n_0_52_STATE.outMessages[0], 0, 1000)
             
         
         
-        n_0_53_STATE.messageTransferFunctions = [
+        n_0_52_STATE.messageTransferFunctions = [
             function (inMessage) {
                     
-                    return n_0_53_STATE.outMessages[0]
+                    return n_0_52_STATE.outMessages[0]
                 }
 ,
         ]
     
 
-            const n_0_54_STATE = {
+            const n_0_53_STATE = {
                 currentValue: 0
             }
         
 
         const exports = {
-            metadata: {"libVersion":"0.1.0","audioSettings":{"bitDepth":64,"channelCount":{"in":2,"out":2},"sampleRate":0,"blockSize":0},"compilation":{"io":{"messageReceivers":{"n_0_30":{"portletIds":["0"],"metadata":{"group":"control:float","type":"hsl","label":"","position":[617,450],"initValue":0,"minValue":0,"maxValue":3}},"n_0_53":{"portletIds":["0"],"metadata":{"group":"control","type":"msg","position":[837,283]}}},"messageSenders":{}},"variableNamesIndex":{"io":{"messageReceivers":{"n_0_30":{"0":"ioRcv_n_0_30_0"},"n_0_53":{"0":"ioRcv_n_0_53_0"}},"messageSenders":{}}}}},
+            metadata: {"libVersion":"0.1.0","audioSettings":{"bitDepth":64,"channelCount":{"in":2,"out":2},"sampleRate":0,"blockSize":0},"compilation":{"io":{"messageReceivers":{"n_0_30":{"portletIds":["0"],"metadata":{"group":"control:float","type":"hsl","label":"","position":[617,450],"initValue":0,"minValue":0,"maxValue":3}},"n_0_52":{"portletIds":["0"],"metadata":{"group":"control","type":"msg","position":[837,283]}}},"messageSenders":{}},"variableNamesIndex":{"io":{"messageReceivers":{"n_0_30":{"0":"ioRcv_n_0_30_0"},"n_0_52":{"0":"ioRcv_n_0_52_0"}},"messageSenders":{}}}}},
             configure: (sampleRate, blockSize) => {
                 exports.metadata.audioSettings.sampleRate = sampleRate
                 exports.metadata.audioSettings.blockSize = blockSize
@@ -1890,8 +1890,8 @@ commons_waitFrame(0, () => n_0_53_RCVS_0(msg_bang()))
                     n_0_30: {
                             "0": ioRcv_n_0_30_0,
                         },
-n_0_53: {
-                            "0": ioRcv_n_0_53_0,
+n_0_52: {
+                            "0": ioRcv_n_0_52_0,
                         },
                 },
                 messageSenders: {
